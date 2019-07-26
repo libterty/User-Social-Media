@@ -49,9 +49,14 @@
         if (event.target.matches('.btn-show-user')) {
             showUserModal(event.target.dataset.id);
         } else if (event.target.matches('.btn-add-favorite')) {
-            let shownFollow = event.target.parentElement.parentElement.parentElement.children[0].children[0];
+            if (dataPanel.classList.contains('list-group') !== true) {
+                let shownFollow = event.target.parentElement.parentElement.parentElement.children[0].children[0];
+                shownFollow.insertAdjacentText('beforeend', ' • Favorite');
+            } else if (dataPanel.classList.contains('list-group') === true) {
+                let shownFollow = event.target.parentElement.parentElement.parentElement.children[1].children[0];
+                shownFollow.insertAdjacentText('beforeend', ' • Favorite');
+            }
             addFavoriteItem(event.target.dataset.id);
-            shownFollow.insertAdjacentText('beforeend', ' • Favorite');
             changeFavEmoji.classList.remove('far');
             changeFavEmoji.classList.add('fas');
         } else if (event.target.matches('.fa-heart')) {
@@ -104,14 +109,24 @@
         let emailShow = event.target.parentElement.children[2];
         let changeFavEmoji = event.target;
         if (event.target.matches('.fa-map-marker-alt') && event.target.matches('.far')) {
-            let locationInfo = event.target.parentElement.parentElement.parentElement.children[0].children[1];
-            locationshow.insertAdjacentText('beforeend', locationInfo.textContent);
+            if (dataPanel.classList.contains('list-group') !== true) {
+                let locationInfo = event.target.parentElement.parentElement.parentElement.children[0].children[1];
+                locationshow.insertAdjacentText('beforeend', locationInfo.textContent);
+            } else if (dataPanel.classList.contains('list-group') === true) {
+                let locationInfo = event.target.parentElement.parentElement.parentElement.children[1].children[1];
+                locationshow.insertAdjacentText('beforeend', locationInfo.textContent);
+            }
             changeFavEmoji.classList.remove('far', 'fa-map-marker-alt');
             changeFavEmoji.classList.add('fas', 'fa-map-marker');
             locationshow.style.color = 'red';
         } else if (event.target.matches('.fa-envelope') && event.target.matches('.far')) {
-            let emailInfo = event.target.parentElement.parentElement.parentElement.children[0].children[2];
-            emailShow.insertAdjacentText('beforeend', emailInfo.textContent);
+            if (dataPanel.classList.contains('list-group') !== true) {
+                let emailInfo = event.target.parentElement.parentElement.parentElement.children[0].children[2];
+                emailShow.insertAdjacentText('beforeend', emailInfo.textContent);
+            } else if (dataPanel.classList.contains('list-group') === true) {
+                let emailInfo = event.target.parentElement.parentElement.parentElement.children[1].children[2];
+                emailShow.insertAdjacentText('beforeend', emailInfo.textContent);
+            }
             changeFavEmoji.classList.remove('far');
             changeFavEmoji.classList.add('fas');
             emailShow.style.color = 'red';
@@ -323,10 +338,10 @@
         const list = JSON.parse(localStorage.getItem('favoriteUsers')) || [];
         const user = data.find(item => item.id === Number(id));
         if (list.some(item => item.id === Number(id))) {
-            alert(`User is already in your favorite list`);
+            alert(`${user.name} is already in your favorite list`);
         } else {
             list.push(user);
-            alert(`Added ${user.title} to your favorite list!`);
+            alert(`Added ${user.name} to your favorite list!`);
         }
         localStorage.setItem('favoriteUsers', JSON.stringify(list));
     };
